@@ -11,7 +11,8 @@ module.exports = {
     'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     options: {
-      emitWarning: true
+      emitWarning: true,
+      emitError: false
     }
   },
   parserOptions: {

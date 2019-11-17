@@ -194,7 +194,7 @@ export default {
   watch: {
     userState (newVal) {
       console.log(newVal)
-      if (newVal.userName != '' && !newVal.newChanges.mccEvents) {
+      if (newVal.userName !== '' && !newVal.newChanges.mccEvents) {
         console.log('Phone home...')
         fetch('load-stack', {
           credentials: 'include'
@@ -227,7 +227,7 @@ export default {
     },
     dragEntry (entry, event) {
       event.dataTransfer.setData('text/plain', JSON.stringify(entry))
-      event.dataTransfer.dropEffect = 'move';
+      event.dataTransfer.dropEffect = 'move'
     },
     dragOverEntry (ev) {
       // This will cancel the dragover event, which makes dropping possible.
@@ -235,10 +235,10 @@ export default {
     },
     dropEntry (event) {
       // Get data
-      let movedEntry = event.dataTransfer.getData('text/plain')
+      // let movedEntry = event.dataTransfer.getData('text/plain')
 
       // Create a grouping context for entry
-      let newGroup = []
+      // let newGroup = []
 
       // Save to localstorage
 
@@ -263,9 +263,9 @@ export default {
       // Sort such that empties are at the end.
       for (let i = 0; i < this.queues.length; i++) {
         this.queues[i].sort((one, other) => {
-          if (one.content == emptyText) {
+          if (one.content === emptyText) {
             return 1
-          } else if (other.content == emptyText) {
+          } else if (other.content === emptyText) {
             return -1
           } else {
             return 0
@@ -280,19 +280,19 @@ export default {
       // Enforce supported process amount
       if (e.target.value < 3 || e.target.value > 5) {
         this.toast('Only 3 - 5 processes supported.')
-        return;
+        return
       }
 
       let queuedProcesses =
-        this.queues[0].filter(el => el.content != emptyText).length +
-        this.queues[1].filter(el => el.content != emptyText).length
+        this.queues[0].filter(el => el.content !== emptyText).length +
+        this.queues[1].filter(el => el.content !== emptyText).length
 
       // Cannot set processes allowed to less than processes extant
       if (e.target.value < queuedProcesses) {
         this.toast(
           `There are more than ${e.target.value} processes currently active`
         )
-        return;
+        return
       }
 
       // Draw boxes if needed.
@@ -372,7 +372,7 @@ export default {
       }
     },
     taskComplete (e) {
-      if (this.stack.content == emptyText) {
+      if (this.stack.content === emptyText) {
         return
       }
 
@@ -380,7 +380,7 @@ export default {
       this.stack.content = emptyText
 
       // Pull from queue, if any is non-empty.
-      if (this.queues.flat().some(el => el.content != emptyText)) {
+      if (this.queues.flat().some(el => el.content !== emptyText)) {
         this.queueToStack()
       }
 
@@ -393,8 +393,8 @@ export default {
       }
     },
     queueToStack () {
-      if (this.queues[this.bit].every(el => el.content == emptyText)) {
-        let checkInstead = this.bit == 0 ? 1 : 0
+      if (this.queues[this.bit].every(el => el.content === emptyText)) {
+        let checkInstead = this.bit === 0 ? 1 : 0
         this.stack = this.queues[checkInstead].shift()
         this.queues[checkInstead].push({
           content: emptyText
@@ -405,7 +405,7 @@ export default {
           content: emptyText
         })
 
-        this.bit = this.bit == 0 ? 1 : 0
+        this.bit = this.bit === 0 ? 1 : 0
       }
 
       // Commit to localStorage
@@ -426,7 +426,7 @@ export default {
       let queueNum = document.querySelector('input[name="status-1"]:checked')
         .value
 
-      if (queueNum == 1) {
+      if (queueNum === 1) {
         this.popUpInfoBoxWithContent(
           "Can't Do THAT!!",
           `
@@ -442,9 +442,9 @@ export default {
 
         // Sort such that empties are at the end.
         this.queues[queueNum].sort((one, other) => {
-          if (one.content == emptyText) {
+          if (one.content === emptyText) {
             return 1
-          } else if (other.content == emptyText) {
+          } else if (other.content === emptyText) {
             return -1
           } else {
             return 0
@@ -465,10 +465,10 @@ export default {
     },
     moveToStack () {
       let dequeue
-      if (this.queues[this.bit].every(el => el.content == emptyText)) {
-        let checkInstead = this.bit == 0 ? 1 : 0
+      if (this.queues[this.bit].every(el => el.content === emptyText)) {
+        let checkInstead = this.bit === 0 ? 1 : 0
         dequeue = this.queues[checkInstead].shift()
-        if (dequeue.content == this.stack.content) {
+        if (dequeue.content === this.stack.content) {
           this.toast(
             'This stays on the stack, since there are no other tasks left in the queue to switch out with.'
           )
@@ -477,14 +477,14 @@ export default {
         }
       } else {
         dequeue = this.queues[this.bit].shift()
-        if (dequeue.content == this.stack.content) {
+        if (dequeue.content === this.stack.content) {
           this.toast(
             'This stays on the stack, since there are no other tasks left in the queue to switch out with.'
           )
         } else {
           this.stack = dequeue
         }
-        this.bit = this.bit == 0 ? 1 : 0
+        this.bit = this.bit === 0 ? 1 : 0
       }
 
       // Commit to localStorage
@@ -500,7 +500,7 @@ export default {
     // Returns either false, and a reason why; or true, and the trimmed string
     validateNewTask (taskContent) {
       let trimmedInput = taskContent.trim()
-      if (trimmedInput == '') {
+      if (trimmedInput === '') {
         return {
           res: '',
           msg: 'Task cannot be empty.'
@@ -529,10 +529,10 @@ export default {
       // If string invalid, return.
       if (!validateRes.res) {
         this.toast(validateRes.msg)
-        return;
+        return
       }
 
-      if (this.stack.content == emptyText) {
+      if (this.stack.content === emptyText) {
         this.stack.content = validateRes.res
         localStorage.setItem('stack', JSON.stringify(this.stack))
 
@@ -541,7 +541,7 @@ export default {
           this.saveYourStack()
         }
 
-        document.getElementById('new-addon').value = '';
+        document.getElementById('new-addon').value = ''
       } else if (!this.isCapacityAtMax()) {
         // Add to the proper queue.
         let queueNum = document.querySelector('input[name="status-2"]:checked')
@@ -555,9 +555,9 @@ export default {
 
         // Sort such that empties are at the end.
         this.queues[queueNum].sort((one, other) => {
-          if (one.content == emptyText) {
+          if (one.content === emptyText) {
             return 1
-          } else if (other.content == emptyText) {
+          } else if (other.content === emptyText) {
             return -1
           } else {
             return 0
@@ -571,7 +571,7 @@ export default {
           this.saveYourStack()
         }
 
-        document.getElementById('new-addon').value = '';
+        document.getElementById('new-addon').value = ''
       } else {
         this.popUpInfoBoxWithContent(
           'ONE ONLY HAS SO MANY HANDS',
@@ -581,12 +581,12 @@ export default {
     },
     removeAnEntry (queueNum) {
       let emptyToRemove = this.queues[queueNum].findIndex(
-        el => el.content == emptyText
+        el => el.content === emptyText
       )
-      if (emptyToRemove == -1) {
-        queueNum = queueNum == 0 ? 1 : 0
+      if (emptyToRemove === -1) {
+        queueNum = queueNum === 0 ? 1 : 0
         emptyToRemove = this.queues[queueNum].findIndex(
-          el => el.content == emptyText
+          el => el.content === emptyText
         )
         this.queues[queueNum].splice(emptyToRemove, 1)
       } else {
@@ -597,7 +597,7 @@ export default {
       console.log('Saving Stack...')
 
       // If user logged in, note that these changes have yet to be persisted
-      if (this.userState.userName != null && this.userState.userName != '') {
+      if (this.userState.userName != null && this.userState.userName !== '') {
         this.$emit('unsavedChanges', { mccEvents: true })
       }
 
@@ -627,7 +627,7 @@ export default {
           }
           if (
             this.userState.userName != null &&
-            this.userState.userName != ''
+            this.userState.userName !== ''
           ) {
             this.$emit('unsavedChanges', { mccEvents: false })
           }
@@ -664,7 +664,7 @@ export default {
     },
     isCapacityAtMax () {
       return (
-        this.queues.flat().filter(el => el.content != emptyText).length ==
+        this.queues.flat().filter(el => el.content !== emptyText).length ===
         this.processesAllowed
       )
     },
@@ -714,7 +714,7 @@ export default {
 
       // Remove all text nodes
       toastEl.childNodes.forEach(node => {
-        if (node.nodeType == 3) {
+        if (node.nodeType === 3) {
           toastEl.removeChild(node)
         }
       })
@@ -731,6 +731,21 @@ export default {
 </script>
 
 <style scoped>
+#app-root {
+  position: relative;
+  font-size: 16px;
+  background-color: black;
+  font-family: "Monaco", "Fira Mono", "DejaVu Sans Mono", "Consolas",
+    "Courier New", Courier, monospace;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: white;
+  /* width: 100%; */
+  height: 100%;
+  margin: 0 auto;
+}
+
 input[type="text"] {
   background-color: black;
   color: white;
@@ -753,11 +768,6 @@ input[type="radio"] {
   vertical-align: bottom;
 }
 
-#app-root {
-  position: relative;
-  color: white;
-  height: 100%;
-}
 #help-top {
   font-weight: 600;
   text-align: left;
