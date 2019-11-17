@@ -1,4 +1,4 @@
-# mcclure-events
+# mCclure Events
 
 ## Project setup
 ```
