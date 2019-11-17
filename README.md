@@ -12,7 +12,7 @@ npm run serve
 
 ### Compiles and minifies for production
 ```
-npm run build
+./node_modules/.bin/vue-cli-service build --target wc --name hire-able src/App.vue
 ```
 
 ### Run your tests
