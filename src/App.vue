@@ -140,7 +140,11 @@ export default {
     userState: Object
   },
   mounted () {
-    console.log(this.userState)
+    this.userState = JSON.parse(this.userState)
+    this.$nextTick(() => {
+      console.log(`${this.userState}`)
+    })
+    console.log(`User State: ${this.userState}`)
     // if user comes from sharedStack link, bring in the corresponding stack
     // else, if user not logged in, load from local storage
     // otherwise, if user is logged in, pull from server.
@@ -220,7 +224,7 @@ export default {
   methods: {
     handleOutsideClicks (e) {
       // Hide all modals showing.
-      let modals = document.getElementsByClassName('show-modal')
+      let modals = this.$el.getElementsByClassName('show-modal')
       for (let i = 0; i < modals.length; i++) {
         modals[i].classList.toggle('show-modal')
       }
@@ -333,12 +337,12 @@ export default {
       this.popUpDialog()
     },
     popUpDialog () {
-      let modal = document.getElementById('popup-dialog')
+      let modal = this.$el.querySelector('#popup-dialog')
       modal.classList.toggle('show-modal')
       this.modalUp = true
     },
     popUpDialogChoice (e) {
-      let modal = document.getElementById('popup-dialog')
+      let modal = this.$el.querySelector('#popup-dialog')
       if (e.target.classList.contains('butt-yes')) {
         let initialState = this.$options.data.call(this)
 
@@ -420,10 +424,10 @@ export default {
     },
     moveToQueue (e) {
       e.stopPropagation()
-      let stackContent = document.getElementById('stack-content')
+      let stackContent = this.$el.querySelector('#stack-content')
 
       // grab value of status-1
-      let queueNum = document.querySelector('input[name="status-1"]:checked')
+      let queueNum = this.$el.querySelector('input[name="status-1"]:checked')
         .value
 
       if (queueNum === 1) {
@@ -460,7 +464,7 @@ export default {
     popUpInfoBoxWithContent (title, content) {
       this.genPopUpTitle = title
       this.genPopUpText = content
-      let modal = document.getElementById('generic-pop-up-info')
+      let modal = this.$el.querySelector('#generic-pop-up-info')
       modal.classList.toggle('show-modal')
     },
     moveToStack () {
@@ -523,7 +527,7 @@ export default {
       e.stopPropagation()
 
       let validateRes = this.validateNewTask(
-        document.getElementById('new-addon').value
+        this.$el.querySelector('#new-addon').value
       )
 
       // If string invalid, return.
@@ -541,10 +545,10 @@ export default {
           this.saveYourStack()
         }
 
-        document.getElementById('new-addon').value = ''
+        this.$el.querySelector('#new-addon').value = ''
       } else if (!this.isCapacityAtMax()) {
         // Add to the proper queue.
-        let queueNum = document.querySelector('input[name="status-2"]:checked')
+        let queueNum = this.$el.querySelector('input[name="status-2"]:checked')
           .value
         this.queues[queueNum].push({
           content: validateRes.res
@@ -571,7 +575,7 @@ export default {
           this.saveYourStack()
         }
 
-        document.getElementById('new-addon').value = ''
+        this.$el.querySelector('#new-addon').value = ''
       } else {
         this.popUpInfoBoxWithContent(
           'ONE ONLY HAS SO MANY HANDS',
@@ -687,13 +691,17 @@ export default {
         <br><br>If unregistered, it will only last until the next day's end.
         <br><br>Please tweet your comments or hopes and dreams or if you just want a ghost to talk to <a href="https://twitter.com/shinepickaw" style="color:white;font-weight:600;"><b>@shinepickaw</b></a>`
 
-      let modal = document.getElementById('verbose-text-box')
+      let modal = this.$el.querySelector('#verbose-text-box')
       modal.classList.toggle('show-modal')
       this.modalUp = true
     },
+    getShadowRoot () {
+      const shadows = document.getElementsByTagName('MCCLURE-EVENTS')
+      return shadows[0].shadowRoot
+    },
     popUpBoxWithContent (text) {
       this.popUpText = text
-      let modal = document.getElementById('share-url-box')
+      let modal = this.$el.querySelector('#share-url-box')
       modal.classList.toggle('show-modal')
       this.modalUp = true
     },
@@ -705,12 +713,12 @@ export default {
       document.execCommand('copy')
       document.body.removeChild(toCopy)
 
-      let modal = document.getElementById('share-url-box')
+      let modal = this.$el.querySelector('#share-url-box')
       modal.classList.toggle('show-modal')
       this.modalUp = false
     },
     toast (msg) {
-      let toastEl = document.getElementById('toast')
+      let toastEl = this.$el.querySelector('#toast')
 
       // Remove all text nodes
       toastEl.childNodes.forEach(node => {
