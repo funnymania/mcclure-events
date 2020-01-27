@@ -197,7 +197,10 @@ export default {
   },
   watch: {
     userState (newVal) {
-      console.log(newVal)
+      if (typeof newVal !== 'object') {
+        newVal = JSON.parse(JSON.stringify(newVal))
+      }
+
       if (newVal.userName !== '' && !newVal.newChanges.mccEvents) {
         console.log('Phone home...')
         fetch('load-stack', {
