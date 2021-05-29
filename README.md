@@ -1,5 +1,8 @@
 # mCclure Events
 
+
+https://user-images.githubusercontent.com/36145527/120058219-3d8a3c00-bffe-11eb-8dcf-21fa74938a77.mp4
+
 ## Project setup
 ```
 npm install
